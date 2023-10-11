@@ -2,11 +2,11 @@
 
 class Pizza{
 
-    private $_id;
-    private $_sabor;
-    private $_precio;
-    private $_tipo;
-    private $_cantidad;
+    public $_id;
+    public $_sabor;
+    public $_precio;
+    public $_tipo;
+    public $_cantidad;
 
     #region CONSTRUCT
     public function __construct($id,$sabor,$precio,$tipo,$cantidad)
@@ -94,15 +94,94 @@ class Pizza{
 
     #region METODOS
 
+    public function Equals($obj):bool{
+        if (get_class($obj) == "Pizza" &&
+            $obj->getSabor() == $this->getSabor() &&
+            $obj->getTipo() == $this->getTipo()) {
+            return true;
+        }
+        return false;
+    }
+    
+
+    public function BuscarEnArray($arrayPizzas):bool
+    {
+        //primero verifico si el array no esta vacio;
+        if(!empty($arrayPizzas))
+        {
+            echo "El array no esta vacio<br>";
+            //itero a travess de cada pizza en el array;
+            foreach($arrayPizzas as $pizza)
+            {
+                //compruebo si la pizza actual es iogual a la pizza en cuestion;
+                if($this->Equals($pizza))
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            echo 'El Array esta vacio <br>';
+        }
+
+        return false;
+    }
+
     public static function ActualizarArray($pizza,$action):string
     {
         //ruta del archivo json
         $filePath = 'Pizza.json';
         //el mensaje a devolver;
         $message = '';
+        //Ahora leo el contenido del archivo json y obtengo el array de pizzas;
+        $arrayDePizzas = Pizza::LeerJSON($filePath);
 
+
+        //si la pizza no existe en el array, la agrego
+        if(!$pizza->BuscarEnArray($arrayDePizzas))
+        {
+            if($action == "add")
+            {
+                array_push($arrayDePizzas,$pizza);
+                $message = "La Pizza no es existente, la añado.<br>";
+            }
+
+        }
+        else{
+            //Si existe, la actualizo.
+            foreach($arrayDePizzas as $unaPizza)
+            {
+                if($unaPizza->Equals($pizza))
+                {
+                    if($action == "add")
+                    {
+                        //si la accion es el add, actualizo la cantidad y el precio
+                        $unaPizza->setCantidad($unaPizza->getCantidad() + $pizza->getCantidad());
+                        $unaPizza->setPrecio($pizza->getPrecio());
+                        $message = "La pizza se actualizo";
+                    }
+                    else if($action == "sub"){
+                        //si es igual a sub, resto la cantidad
+                        if($unaPizza->getCantidad() >= $pizza->getCantidad())
+                        {
+                            $unaPizza->setCantidad($unaPizza->getCantidad()- $pizza->getCantidad());
+                            $message = "Pizza Vendida";
+                        }
+                        else
+                        {
+                            $message = "No hay suficiente stock";
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        //guardo el array actualizado de pizzas en el archivo json;
+        Pizza::GuardarEnJSON($arrayDePizzas,$filePath);
         
-
+        //devuelvo el mensaje;
         return $message;
     }
 
@@ -110,8 +189,6 @@ class Pizza{
 
 
     #endregion
-
-
 
 
     #region JSON-FUNCTIONS
