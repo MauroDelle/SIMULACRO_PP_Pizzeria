@@ -5,9 +5,8 @@ return [
         'Carga' => 'Pizzeria-Parte-01/PizzaCarga.php',
     ],
     'POST' => [
-        'Consultas' => 'PizzaConsultar.php',
-        'Venta' => 'AltaVenta.php',
-        'ConsultasVentas' => 'ConsultasVentas.php',
+        'Consulta' => 'Pizzeria-Parte-01/PizzaConsultar.php',
+        'Venta' => 'Pizzeria-Parte-02/AltaVenta.php'
     ],
     'PUT' =>
     [

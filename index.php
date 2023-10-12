@@ -3,7 +3,6 @@
 $method = $_SERVER['REQUEST_METHOD']; //Obtengo el metodo http de la solicitud (get, post, put, delete);
 $action = key($_GET); //Obtengo el primer parametro de la url, que generalmente indica la accion a realizar;
 
-var_dump($method, $action);
 //Ahora cargo el archivo de rutas y controladores;
 $routes = include 'routes.php';
 

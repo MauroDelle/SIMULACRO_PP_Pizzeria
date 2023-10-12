@@ -128,6 +128,33 @@ class Pizza{
         return false;
     }
 
+    public static function Buscar($array, $sabor, $tipo){
+        $message = "";
+        $sTipo = false;
+        $sSabor = false;
+        foreach ($array as $pizza){
+            if($pizza->getSabor() == $sabor){
+                $sSabor = true;
+            }
+            if($pizza->getTipo() == $tipo){
+                $sTipo = true;
+            }
+        }
+
+        if($sTipo && $sSabor){
+            $message =  'Si Hay';
+        }else if($sTipo){
+            $message =  'Solo hay de tipo: '.$tipo.'';
+        }else if($sSabor){
+            $message =  'Solo hay de sabor: '.$sabor.'';
+        }else{
+            $message =  'No hay Pizzas '.$tipo.' ni de sabor '.$sabor.'';
+        }
+
+        return $message;
+    }
+
+
     public static function ActualizarArray($pizza,$action):string
     {
         //ruta del archivo json
